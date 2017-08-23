@@ -2,6 +2,15 @@
 
 Cloud service for creating and sharing notes
 
+## Docs
+
+- Commands
+- DB
+- Entities
+- Server
+- Setup
+- Structure
+
 ## Setup
 
 ```bash
@@ -84,6 +93,5 @@ Friends (User * User) : {
 	to: User.uuid,
 	accepted: bool
 }
-
 
 ```
