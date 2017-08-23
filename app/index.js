@@ -3,7 +3,7 @@ const path = require('path');
 
 const config = require('./config');
 const sitemap = require('./sitemap');
-const api = require('./app/server/api');
+const api = require('./server/api');
 
 let app = express();
 
@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
-app.use(serveStatic(path.join(__dirname, config.staticFolder), {'index': ['index.html', 'index.htm']}));
+app.use(serveStatic(path.join(path.dirname(__dirname), config.staticFolder), {'index': ['index.html', 'index.htm']}));
 
 // register endpoints
 api.serve(app);

@@ -5,7 +5,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require('webpack');
 
-const sitemap = require('./sitemap');
+const sitemap = require('./app/sitemap');
+const config = require('./app/config');
 
 
 const slashes = (s, start, end) =>
@@ -56,7 +57,7 @@ const extractLess = new ExtractTextPlugin({
 /**********************************
  * AND HERE GOES THE CONFIG ITSELF*
  **********************************/
-const config = {
+const webpackConfig = {
 	// create webpack entrypoints for each static page
 	entry: createEntries(sitemap),
 	output: {
@@ -103,7 +104,7 @@ const config = {
 	)
 };
 
-module.exports = config;
+module.exports = webpackConfig;
 
 function mapObj(obj, f, fKey = (k => k))
 {

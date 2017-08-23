@@ -2,7 +2,7 @@
   "name": "noties",
   "version": "1.0.0",
   "description": "A service for creating cloud notes and sharing them",
-  "main": "index.js",
+  "main": "app/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

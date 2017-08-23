@@ -3,7 +3,7 @@
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 run () {
-	NODE_ENV="$1" node ./index.js
+	NODE_ENV="$1" node ./app/index.js
 }
 
 case "$1" in
