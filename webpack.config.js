@@ -3,8 +3,9 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const webpack = require('webpack');
 
-const sitemap = require('./sitemap')
+const sitemap = require('./sitemap');
 
 
 const slashes = (s, start, end) =>
@@ -52,6 +53,9 @@ const extractLess = new ExtractTextPlugin({
     filename: "[name]style.css",
 });
 
+/**********************************
+ * AND HERE GOES THE CONFIG ITSELF*
+ **********************************/
 const config = {
 	// create webpack entrypoints for each static page
 	entry: createEntries(sitemap),
@@ -89,6 +93,10 @@ const config = {
 	plugins: [
 		new CleanWebpackPlugin(['public']), // clean 'public' directory before build
 		extractLess, // required for .less compilation
+		new webpack.DefinePlugin({
+			NODE_ENV: JSON.stringify(config.NODE_ENV),
+			PRODUCTION: JSON.stringify(config.NODE_ENV === 'prod')
+		})
 	].concat(
 		// automatically create a new HTMLWebpackPlugin for each static page in sitemap
 		createPlugins(sitemap)

@@ -32,5 +32,5 @@ app.use(function(err, req, res, next){
 
 // Starting server
 app.listen(config.port, function(){
-	console.log('Server started at port ' + config.port);
+	console.log(`A ${config.NODE_ENV} server started at port ${config.port}`);
 });
