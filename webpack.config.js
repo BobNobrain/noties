@@ -4,10 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const sitemap = [
-	{ name: '/', entry: 'index.js' },
-	{ name: 'profile' }
-];
+const sitemap = require('./sitemap')
 
 
 const slashes = (s, start, end) =>
@@ -39,26 +36,25 @@ const createHtmlPlugin = page =>
 		template
 	});
 };
-const createEntries = pages =>
+const createEntries = pages => pages.reduce((acc, item) =>
 {
-	return pages.reduce((acc, item) =>
-	{
-		acc[slashes(item.name, false, true)] = createEntry(item);
-		return acc;
-	}, {});
-}
+	acc[slashes(item.name, false, true)] = createEntry(item);
+	return acc;
+}, {});
+const createPlugins = pages => pages.reduce((acc, item) =>
+{
+	if (!item.isGenerated)
+		acc.push(createHtmlPlugin(item));
+	return acc;
+}, []);
 
 const extractLess = new ExtractTextPlugin({
     filename: "[name]style.css",
-    // disable: process.env.NODE_ENV === "development"
 });
 
 const config = {
-	entry: {
-		// only static pages should go here
-		'/': './app/pages/index.js',
-		'profile/': './app/pages/profile/index.js'
-	},
+	// create webpack entrypoints for each static page
+	entry: createEntries(sitemap),
 	output: {
 		filename: '[name]bundle.js',
 		path: path.resolve(__dirname, 'public')
@@ -91,21 +87,12 @@ const config = {
 	},
 
 	plugins: [
-		new CleanWebpackPlugin(['public']),
-		extractLess,
-		new HtmlWebpackPlugin({
-			inject: false,
-			template: './app/pages/index.handlebars',
-			filename: 'index.html',
-			chunks: ['/']
-		}),
-		new HtmlWebpackPlugin({
-			inject: false,
-			template: './app/pages/profile/index.handlebars',
-			filename: 'profile/index.html',
-			chunks: ['profile/index']
-		})
-	]
+		new CleanWebpackPlugin(['public']), // clean 'public' directory before build
+		extractLess, // required for .less compilation
+	].concat(
+		// automatically create a new HTMLWebpackPlugin for each static page in sitemap
+		createPlugins(sitemap)
+	)
 };
 
 module.exports = config;
