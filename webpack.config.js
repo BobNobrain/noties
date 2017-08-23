@@ -5,29 +5,39 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const config = {
 	entry: {
-		index: './app/pages/index.js',
-		'profile/index': './app/pages/profile/index.js'
+		// only static pages should go here
+		'/': './app/pages/index.js',
+		'profile/': './app/pages/profile/index.js'
 	},
 	output: {
-		filename: '[name].bundle.js',
+		filename: '[name]bundle.js',
 		path: path.resolve(__dirname, 'public')
 	},
 
 	module: {
 		rules: [
-			{ test: /\.handlebars$/, loader: "handlebars-loader" }
+			{
+				test: /\.handlebars$/,
+				loader: "handlebars-loader",
+				query: {
+					partialDirs: [
+						path.join(__dirname, 'app', 'templates')
+					]
+				}
+			}
 		]
 	},
 
 	plugins: [
 		new CleanWebpackPlugin(['public']),
 		new HtmlWebpackPlugin({
-			inject: 'head',
+			inject: false,
 			template: './app/pages/index.handlebars',
-			filename: 'index.html'
+			filename: 'index.html',
+			chunks: ['/']
 		}),
 		new HtmlWebpackPlugin({
-			inject: 'head',
+			inject: false,
 			template: './app/pages/profile/index.handlebars',
 			filename: 'profile/index.html',
 			chunks: ['profile/index']
