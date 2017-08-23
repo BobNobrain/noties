@@ -28,12 +28,17 @@
 	<tr>
 		<td>filename</td>
 		<td>Имя выходного файла</td>
-		<td>[name]index.htm</td>
+		<td>public/[name]index.html</td>
+	</tr>
+	<tr>
+		<td>entry</td>
+		<td>Имя корневого скрипта</td>
+		<td>pages/[name]index.js</td>
 	</tr>
 	<tr>
 		<td>template</td>
 		<td>Имя исходного файла шаблона</td>
-		<td>[name]index.handlebars</td>
+		<td>pages/[name]index.handlebars</td>
 	</tr>
 	<tr>
 		<td>isDynamic</td>
