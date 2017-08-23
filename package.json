@@ -11,5 +11,14 @@
     "url": "github.com/BobNobrain/noties.git"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.16",
+    "handlebars-loader": "^1.5.0",
+    "html-webpack-plugin": "^2.30.1",
+    "webpack": "^3.5.5"
+  },
+  "dependencies": {
+    "handlebars": "^4.0.10"
+  }
 }
