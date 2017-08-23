@@ -2,3 +2,6 @@ alias build='./build.sh'
 alias bdev='./build.sh --dev'
 alias bprod='./build.sh --prod'
 alias bclear='./build.sh clear'
+
+alias run='./run.sh'
+alias runprod='./run.sh --prod'
