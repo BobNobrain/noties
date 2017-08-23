@@ -1,8 +1,9 @@
 const express = require('express');
 const path = require('path');
 
-const config = require('./config.js');
+const config = require('./config');
 const sitemap = require('./sitemap');
+const api = require('./app/server/api');
 
 let app = express();
 
@@ -11,12 +12,15 @@ let logger = require('morgan');
 let bodyParser = require('body-parser');
 let serveStatic = require('serve-static');
 
-app.use(logger('dev'));
+app.use(logger(config.NODE_ENV === 'prod'? 'tiny' : 'dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(serveStatic(path.join(__dirname, config.staticFolder), {'index': ['index.html', 'index.htm']}));
+
+// register endpoints
+api.serve(app);
 
 // error handling
 app.use(function(req, res, next){
