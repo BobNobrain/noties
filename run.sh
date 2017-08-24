@@ -34,7 +34,7 @@ case "$1" in
 	'db'|'--db')
 		rundb $*
 		;;
-	'clean'|'--clean')
+	'clear'|'--clear')
 		clean
 		;;
 	*)
