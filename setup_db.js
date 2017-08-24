@@ -4,58 +4,110 @@ const uuid4 = require('uuid/v4');
 const fs = require('fs');
 
 const doGenerateData = process.argv.indexOf('--gen-data') != -1;
+const doSaveJson = process.argv.indexOf('--save') != -1;
+const doCreateTables = process.argv.indexOf('--again') == -1;
 
-const insertDocs = function(db, collection, docs, callback) {
-	// Get the documents collection
-	const dbCollection = db.collection(collection);
-	// Insert some documents
-	dbCollection.insertMany(docs, function(err, result) {
-		let ex = null;
-		if (err) ex = err;
-		if (result.result.n != docs.length)
-			ex = new Error('Managed to insert not all documents!');
-		callback(result);
-		throw ex;
-	});
-}
+let db = null;
+let data = null;
 
-MongoClient.connect(config.mongoUrl, function(err, db)
+MongoClient.connect(config.mongoUrl).then(conn =>
 {
-	if (err)
-	{
-		console.error('could not enstablish connection to database: ' + err);
-		return;
-	}
 	console.log("Connected successfully to server");
+	db = conn;
 
 	if (doGenerateData)
 	{
-		const data = generateFakeData();
+		data = generateFakeData();
 		console.log('Generation done:');
 		for (let key in data)
 		{
 			if (!data.hasOwnProperty(key)) continue;
 			console.log(`- ${key}: ${data[key].length} items;`);
 		}
-		console.log('Saving to file: generated_data.json...');
-
-		fs.writeFile(
-			'generated_data.json',
-			JSON.stringify(data),
-			function(err) {
-				if(err)
-				{
-					return console.log(err);
+		if (doSaveJson)
+		{
+			console.log('Saving to file: generated_data.json...');
+			fs.writeFile(
+				'generated_data.json',
+				JSON.stringify(data),
+				function(err) {
+					if(err)
+					{
+						return console.log(err);
+					}
+					console.log('Done.');
 				}
-				console.log('Done.');
-			}
-		); 
-
+			);
+		}
 	}
-	else
-		console.log(process.argv);
-	db.close();
-});
+	return db;
+})
+	// creating collections and indexes
+	.then(_ =>
+	{
+		if (doCreateTables)
+		{
+			return Promise.resolve(void 0)
+				.then(_ => db.createCollection('users'))
+				.then(_ => db.createIndex('users', { uuid: 1 }, { unique: true }))
+				.then(_ => db.createIndex('users', { username: 1 }, { unique: true }))
+				
+				.then(_ => db.createCollection('noties'))
+				.then(_ => db.createIndex('noties', { uuid: 1 }, { unique: true }))
+				.then(_ => db.createIndex('noties', { name: 1 }, { unique: false }))
+
+				.then(_ => db.createCollection('files'))
+				.then(_ => db.createIndex('files', { uuid: 1 }, { unique: true }))
+				.then(_ => db.createIndex('files', { owner: 1 }, { unique: false }))
+
+				.then(_ => db.createCollection('plans'))
+				.then(_ => db.createIndex('plans', { plan_id: 1 }, { unique: true }))
+
+				.then(_ => db.createCollection('shared_noties'))
+				.then(_ => db.createIndex('shared_noties', { uuid: 1 }, { unique: true }))
+
+				.then(_ => db.createCollection('public_noties'))
+				.then(_ => db.createIndex('public_noties', { uuid: 1 }, { unique: true }))
+
+				.then(_ => db.createCollection('friends'))
+				.then(_ => db.createIndex('friends', { from: 1 }, { unique: false }))
+				.then(_ => db.createIndex('friends', { to: 1 }, { unique: false }))
+			;
+		}
+	})
+
+	// filling it with data
+	.then(_ =>
+	{
+		if (data === null)
+		{
+			// no data was generated
+			return;
+		}
+		return Promise.resolve(void 0)
+			// cleanup data if exists
+			.then(_ => db.collection('plans').deleteMany({}))
+			.then(_ => db.collection('users').deleteMany({}))
+			.then(_ => db.collection('friends').deleteMany({}))
+			.then(_ => db.collection('files').deleteMany({}))
+			.then(_ => db.collection('noties').deleteMany({}))
+			.then(_ => db.collection('shared_noties').deleteMany({}))
+			.then(_ => db.collection('public_noties').deleteMany({}))
+			// insert newly generated data
+			.then(_ => db.collection('plans').insertMany(data.plans))
+			.then(_ => db.collection('users').insertMany(data.users))
+			.then(_ => db.collection('friends').insertMany(data.friends))
+			.then(_ => db.collection('files').insertMany(data.files))
+			.then(_ => db.collection('noties').insertMany(data.noties))
+			.then(_ => db.collection('shared_noties').insertMany(data.sharedNoties))
+			.then(_ => db.collection('public_noties').insertMany(data.publicNoties))
+			.then(_ => console.log('Inserted new values successfully!'))
+		;
+	})
+
+	.then(_ => db.close())
+	.catch(err => console.error(err) || db.close())
+;
 
 function generateFakeData(scales = 1)
 {
@@ -94,14 +146,17 @@ function generateFakeData(scales = 1)
 	randomFilter(noties, 0.3).forEach(n => sharedNoties.push(generateShared(n)));
 	randomFilter(noties, 0.2).forEach(n => publicNoties.push(generatePublic(n)));
 
-	randomFilter(users, 0.9).forEach(user =>
+	while (!friends.length)
 	{
-		randomFilter(users, 0.05)
-			.filter(u => u.uuid != user.uuid)
-			.forEach(u => friends.push(generateFriendship(user, u)));
-	});
+		randomFilter(users, 0.9).forEach(user =>
+		{
+			randomFilter(users, 0.05)
+				.filter(u => u.uuid != user.uuid)
+				.forEach(u => friends.push(generateFriendship(user, u)));
+		});
 
-	cleanupFriends();
+		cleanupFriends();
+	}
 
 	function generateUser()
 	{

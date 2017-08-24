@@ -11,11 +11,17 @@ rundb () {
 		mkdir data
 	fi
 	docker run -v "$(pwd)/data":/data --name noties-db -d mongo:3
-	if ! [[ "$2." == "" || "$2." == "--fake-data." ]]; then
-		echo 'Unrecognized option for run db:' "$2"
-		exit 1
-	fi
-	node setup_db.js "$2"
+	echo 'Waiting mongodb to start...'
+	sleep 1
+	export DB_IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' noties-db`
+	echo 'DB server started at' $DB_IP
+	node setup_db.js $*
+}
+
+clean () {
+	docker rm -f noties-db
+	rm -rf data
+	mkdir data
 }
 
 case "$1" in
@@ -26,7 +32,10 @@ case "$1" in
 		run dev
 		;;
 	'db'|'--db')
-		rundb "$2"
+		rundb $*
+		;;
+	'clean'|'--clean')
+		clean
 		;;
 	*)
 		echo 'Unrecognized option: ' "$1"
