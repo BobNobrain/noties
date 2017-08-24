@@ -16,6 +16,15 @@ class File extends UuidEntity
 		this.type = type;
 	}
 
+	serialize()
+	{
+		const data = super.serialize();
+		data.size = this.size;
+		data.owner = this.owner;
+		data.type = this.type;
+		return data;
+	}
+
 	getFileNameArr()
 	{
 		return path.join(uuid.substr(0, 2), uuid.substr(2,2), uuid);
