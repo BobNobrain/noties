@@ -10,7 +10,7 @@ class File extends UuidEntity
 		type = 'text/plain'
 	} = {})
 	{
-		super(uuid);
+		super({ uuid });
 		this.size = size;
 		this.owner = owner;
 		this.type = type;
