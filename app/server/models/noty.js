@@ -26,6 +26,7 @@ class Noty extends UuidEntity
 		data.owner = this.owner;
 		data.content = this.content;
 		data.files = this.files;
+		return data;
 	}
 
 	extractFiles(dbConnection)
