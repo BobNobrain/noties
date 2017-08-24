@@ -185,7 +185,7 @@ function generateFakeData(scales = 1)
 		const content = generateFile(user);
 		files.push(content);
 		const attachments = arr(Math.floor(Math.random()*Math.random()*4 * scales))
-			.map(() => generateFile(user))
+			.map(() => generateFile(user, 'image/png'))
 		;
 		attachments.forEach(a => files.push(a));
 		return {
@@ -196,11 +196,12 @@ function generateFakeData(scales = 1)
 		};
 	}
 
-	function generateFile(user)
+	function generateFile(user, type = 'text/plain')
 	{
 		return {
 			uuid: uuid4(),
 			owner: user.uuid,
+			type,
 			size: rnd(1024)
 		};
 	}

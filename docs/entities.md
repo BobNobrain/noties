@@ -33,6 +33,7 @@ Noty : {
 File : {
 	uuid: uuid (index, PK),
 	owner: User.uuid (index),
+	type: string, // mime
 	size: int // bytes
 }
 

@@ -6,12 +6,14 @@ class File extends UuidEntity
 	constructor({
 		uuid,
 		size = 0,
-		owner = null
+		owner = null,
+		type = 'text/plain'
 	} = {})
 	{
 		super(uuid);
 		this.size = size;
 		this.owner = owner;
+		this.type = type;
 	}
 
 	getFileNameArr()
