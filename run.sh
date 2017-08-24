@@ -3,7 +3,7 @@
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 run () {
-	NODE_ENV="$1" node ./app/index.js
+	NODE_ENV="$1" DB_IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' noties-db` node ./app/index.js
 }
 
 rundb () {
