@@ -38,7 +38,7 @@ File : {
 
 // тарифный план пользователя
 Plan : {
-	id: int (index, PK), // их будет немного
+	plan_id: int (index, PK), // их будет немного
 	name: string,
 	period: int, // enum: ['day', 'month', ...]
 	price: int,
