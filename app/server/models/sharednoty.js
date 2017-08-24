@@ -1,8 +1,9 @@
+const Entity = require('./entity');
 const UuidEntity = require('./uuidentity');
 const User = require('./user');
 const Noty = require('./noty');
 
-class SharedNoty
+class SharedNoty extends UuidEntity
 {
 	constructor({
 		uuid,
@@ -24,6 +25,11 @@ class SharedNoty
 		data.writers = this.writers;
 		data.source = this.source;
 	}
+
+	extractReaders(dbConnection) { return Entity.extractSerial(dbConnection, User, this.readers.map(uuid => ({ uuid }))); }
+	extractWriters(dbConnection) { return Entity.extractSerial(dbConnection, User, this.writers.map(uuid => ({ uuid }))); }
+
+	extractSource(dbConnection) { return Entity.extract(dbConnection, Noty, { uuid: this.source }); }
 }
 SharedNoty.collection = 'shared_noties';
 

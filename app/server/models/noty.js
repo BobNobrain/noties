@@ -1,5 +1,6 @@
 const UuidEntity = require('./uuidentity');
 const User = require('./user');
+const File = require('./user');
 
 class Noty extends UuidEntity
 {
@@ -29,16 +30,7 @@ class Noty extends UuidEntity
 
 	extractFiles(dbConnection)
 	{
-		let p = Promise.resolve([]);
-		for (let i = 0; i < this.files.length; i++)
-		{
-			p = p.then(arr =>
-			{
-				arr.push(Entity.extract(dbConnection, User, { uuid: this.files[i] }));
-				return arr;
-			});
-		}
-		return p;
+		return Entity.extractSerial(dbConnection, File, this.files.map(uuid => ({ uuid })));
 	}
 
 	extractOwner(dbConnection)

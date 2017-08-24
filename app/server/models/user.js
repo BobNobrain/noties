@@ -39,16 +39,7 @@ class User extends UuidEntity
 
 	extractBlackList(dbConnection)
 	{
-		let p = Promise.resolve([]);
-		for (let i = 0; i < this.blackList.length; i++)
-		{
-			p = p.then(arr =>
-			{
-				arr.push(Entity.extract(dbConnection, User, { uuid: this.blackList[i] }));
-				return arr;
-			});
-		}
-		return p;
+		return Entity.extractSerial(dbConnection, User, this.blackList.map(uuid => ({ uuid })));
 	}
 
 	extractPlan(dbConnection)

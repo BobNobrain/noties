@@ -65,6 +65,27 @@ Entity.extractAll = function (dbConnection, EntityClass, filter)
 };
 
 /**
+ * Extracts object by given filters, one by one
+ * @param  {Db} An active connection to mongodb
+ * @param  {Function} A non-abstract subclass of Entity, type of entity to extract
+ * @param  {Object[]} An array of db search filters
+ * @return {Promise<EntityClass[]>} Promise for array of extracted entities
+ */
+Entity.extractSerial = function (dbConnection, EntityClass, filters)
+{
+	let p = Promise.resolve([]);
+	for (let i = 0; i < filters.length; i++)
+	{
+		p = p.then(arr =>
+		{
+			arr.push(Entity.extract(dbConnection, Entity, filters[i]));
+			return arr;
+		});
+	}
+	return p;
+}
+
+/**
  * Saves given entity to db
  * @param  {Db} An active connection to mongodb
  * @param  {Entity} An entity to save
