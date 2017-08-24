@@ -36,6 +36,8 @@ class Plan exdends Entity
 		};
 	}
 
+	getPK() { return 'plan_id'; }
+
 	get period()
 	{
 		return periods[this.periodId];
@@ -47,7 +49,6 @@ class Plan exdends Entity
 	}
 }
 Plan.collection = 'plans';
-Plan.PK = 'plan_id';
 
 Plan.FREE_PLAN_ID = 0;
 

@@ -26,7 +26,7 @@ Entity.extractAll = function (dbConnection, EntityClass, filter)
 Entity.save = function (dbConnection, entity)
 {
 	const data = entity.serialize();
-	const key = data[entity.constructor.PK];
+	const key = data[entity.getPK()];
 	const id = data[key];
 	delete data[key];
 	return dbConnection

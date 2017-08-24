@@ -15,7 +15,8 @@ class UuidEntity extends Entity
 		data.uuid = this.uuid;
 		return data;
 	}
+
+	getPK() { return 'uuid'; }
 }
-UuidEntity.PK = 'uuid';
 
 module.exports = UuidEntity;
