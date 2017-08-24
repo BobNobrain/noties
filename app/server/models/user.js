@@ -27,14 +27,14 @@ class User extends UuidEntity
 
 	serialize()
 	{
-		return {
-			username: this.username,
-			password: this.password,
-			avatar: this.avatar,
-			plan_id: this.planId,
-			paid_until: this.paidUntil,
-			black_list: this.blackList
-		};
+		const data = super.serialize();
+		data.username = this.username;
+		data.password = this.password;
+		data.avatar = this.avatar;
+		data.plan_id = this.planId;
+		data.paid_until = this.paidUntil;
+		data.black_list = this.blackList;
+		return data;
 	}
 
 	extractBlackList(dbConnection)

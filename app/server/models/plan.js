@@ -26,14 +26,14 @@ class Plan exdends Entity
 
 	serialize()
 	{
-		return {
-			plan_id: this.planId,
-			name: this.name,
-			period: this.periodId,
-			price: this.price,
-			max_files_size: this.maxFilesSize,
-			max_notes: this.maxNotes
-		};
+		const data = super.serialize();
+		data.plan_id = this.planId;
+		data.name = this.name;
+		data.period = this.periodId;
+		data.price = this.price;
+		data.max_files_size = this.maxFilesSize;
+		data.max_notes = this.maxNotes;
+		return data;
 	}
 
 	getPK() { return 'plan_id'; }
