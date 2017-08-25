@@ -8,24 +8,10 @@ class Api extends Page
 		this.endpoints = [];
 	}
 
-	// setName(val)
-	// {
-	// 	super.setName(val);
-	// 	if (this.endpoints)
-	// 	{
-	// 		for (let i = 0; i < this.endpoints.length; i++)
-	// 		{
-	// 			const ep = this.endpoints[i];
-	// 			ep.setName(normalizeUrl(val, ep.getName()));
-	// 		}
-	// 	}
-	// }
-
 	addEndpoint(page)
 	{
 		if (page instanceof Page)
 		{
-			// page.setName(normalizeUrl(this.getName(), page.getName()));
 			this.endpoints.push(page);
 			page.parent = this;
 		}

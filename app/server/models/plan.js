@@ -4,6 +4,8 @@ const millisecondsPerDay = 1000*60*60*24;
 const periods 	= ['week', 'month', '3 months', '6 months', 'year', '2 years'];
 const plens		= [7,       30,       3*30,      6*30,       365,    2*365   ].map(days => days*millisecondsPerDay);
 
+const NO_PERIOD = 255;
+
 class Plan extends Entity
 {
 	constructor({
@@ -36,11 +38,21 @@ class Plan extends Entity
 		return data;
 	}
 
+	toJSON()
+	{
+		const json = super.toJSON();
+		json.period_name = this.period;
+		return json;
+	}
+
 	getPK() { return 'plan_id'; }
 
 	get period()
 	{
-		return periods[this.periodId];
+		if (this.periodId != NO_PERIOD)
+			return periods[this.periodId];
+		else
+			return 'infinite'
 	}
 
 	getDuration()
