@@ -29,6 +29,13 @@ class Noty extends UuidEntity
 		return data;
 	}
 
+	toJSON()
+	{
+		const json = super.toJSON();
+		json.content = void 0;
+		return json;
+	}
+
 	extractFiles(dbConnection)
 	{
 		return Entity.extractSerial(dbConnection, File, this.files.map(uuid => ({ uuid })));

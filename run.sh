@@ -12,7 +12,7 @@ rundb () {
 	fi
 	docker run -v "$(pwd)/data":/data --name noties-db -d mongo:3
 	echo 'Waiting mongodb to start...'
-	sleep 1
+	sleep 3
 	export DB_IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' noties-db`
 	echo 'DB server started at' $DB_IP
 	node setup_db.js $*

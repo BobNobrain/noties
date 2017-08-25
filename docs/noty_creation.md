@@ -32,3 +32,10 @@
 > POST /api/noties/<uuid>/file/<uuid> (Content-Type: multipart/form-data { ... })
 < { success: true }
 ```
+
+## Получение содержимого заметки
+
+```
+> GET /api/notes/<uuid>/content
+< (Content-Type: text/plain, ...)
+```

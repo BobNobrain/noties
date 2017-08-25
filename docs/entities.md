@@ -24,7 +24,7 @@ User : {
 Noty : {
 	uuid: uuid (index, PK),
 	name: string (index),
-	owner: User.uuid,
+	owner: User.uuid (index),
 	content: File.uuid, // содержимое в маркдауне, содержащее ссылки на другие файлы (изображения и т.д.)
 	files: [File.uuid] // все файлы, на которые есть ссылки в тексте
 }

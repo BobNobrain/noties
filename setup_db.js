@@ -55,6 +55,7 @@ MongoClient.connect(config.mongoUrl).then(conn =>
 				.then(_ => db.createCollection('noties'))
 				.then(_ => db.createIndex('noties', { uuid: 1 }, { unique: true }))
 				.then(_ => db.createIndex('noties', { name: 1 }, { unique: false }))
+				.then(_ => db.createIndex('noties', { owner: 1 }, { unique: false }))
 
 				.then(_ => db.createCollection('files'))
 				.then(_ => db.createIndex('files', { uuid: 1 }, { unique: true }))
@@ -191,6 +192,7 @@ function generateFakeData(scales = 1)
 		return {
 			uuid,
 			name: user.username + '_noty_' + uuid,
+			owner: user.uuid,
 			content: content.uuid,
 			files: attachments.map(f => f.uuid)
 		};
