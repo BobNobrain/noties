@@ -4,7 +4,6 @@ const methods = [ 'get', 'post', 'put', 'delete', 'all' ];
 
 function normalizeUrl(base, addition)
 {
-	console.log(`normalize url: (${base}, ${addition})`);
 	if (base.endsWith('/')) base = base.substr(0);
 	if (addition.startsWith('/'))
 		return base + addition;
