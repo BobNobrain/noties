@@ -1,35 +1,40 @@
 const Page = require('./page');
 
-function normalizeUrl(base, addition)
-{
-	if (base.endsWith('/')) base = base.substr(0);
-	if (addition.startsWith('/'))
-		return base + addition;
-	else
-		return base + '/' + addition;
-}
-
-class Api
+class Api extends Page
 {
 	constructor(root)
 	{
-		this.root = root;
+		super(root);
 		this.endpoints = [];
 	}
+
+	// setName(val)
+	// {
+	// 	super.setName(val);
+	// 	if (this.endpoints)
+	// 	{
+	// 		for (let i = 0; i < this.endpoints.length; i++)
+	// 		{
+	// 			const ep = this.endpoints[i];
+	// 			ep.setName(normalizeUrl(val, ep.getName()));
+	// 		}
+	// 	}
+	// }
 
 	addEndpoint(page)
 	{
 		if (page instanceof Page)
 		{
-			page.name = normalizeUrl(this.root, page.name);
+			// page.setName(normalizeUrl(this.getName(), page.getName()));
 			this.endpoints.push(page);
+			page.parent = this;
 		}
 		else
 		{
 			if (page != null)
 				throw new TypeError(`Api::addEndpoint should be supplied with Page, but found ${page.constructor.name}`);
 			else
-				throw new TypeError('Api::addEndpoint supplied with invalid object')
+				throw new TypeError('Api::addEndpoint supplied with invalid object');
 		}
 	}
 

@@ -9,7 +9,7 @@ class JsonEndpoint extends Page
 
 	invoke(method, req, res)
 	{
-		new Promise(method(req, res))
+		Promise.resolve(method(req, res))
 			.then(result =>
 			{
 				res.json(result);

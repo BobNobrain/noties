@@ -7,7 +7,6 @@ class Connection
 	{
 		this.mongoUrl = mongoUrl;
 		this.db = null;
-		this.error = null;
 	}
 
 	connect()
@@ -21,18 +20,15 @@ class Connection
 		;
 	}
 
-	registerError(err)
+	close()
 	{
-		this.error = err;
+		this.db.close();
 	}
-	get isError() { return this.error !== null; }
 }
 
-Connection.getInstance = function ()
+Connection.getDefaultInstance = function ()
 {
-	if (!Connection._instance)
-		Connection._instance = new Connection(config);
-	return Connection._instance;
+	return new Connection(config);
 };
 
 module.exports = Connection;

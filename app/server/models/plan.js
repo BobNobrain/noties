@@ -4,7 +4,7 @@ const millisecondsPerDay = 1000*60*60*24;
 const periods 	= ['week', 'month', '3 months', '6 months', 'year', '2 years'];
 const plens		= [7,       30,       3*30,      6*30,       365,    2*365   ].map(days => days*millisecondsPerDay);
 
-class Plan exdends Entity
+class Plan extends Entity
 {
 	constructor({
 		plan_id,

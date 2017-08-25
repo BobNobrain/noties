@@ -2,12 +2,31 @@ const e = require('http-errors');
 
 const methods = [ 'get', 'post', 'put', 'delete', 'all' ];
 
+function normalizeUrl(base, addition)
+{
+	console.log(`normalize url: (${base}, ${addition})`);
+	if (base.endsWith('/')) base = base.substr(0);
+	if (addition.startsWith('/'))
+		return base + addition;
+	else
+		return base + '/' + addition;
+}
+
 class Page
 {
 	constructor(name)
 	{
-		this.name = name;
+		this.setName(name);
+		this.parent = null;
 	}
+
+	getName()
+	{
+		if (this.parent)
+			return normalizeUrl(this.parent.getName(), this.name);
+		return this.name;
+	}
+	setName(val) { this.name = val; }
 
 	serve(app)
 	{
@@ -16,7 +35,7 @@ class Page
 			const method = methods[i];
 			if (typeof this[method] === typeof eval)
 			{
-				app[method.toLowerCase()](this.name, (req, res, next) =>
+				app[method](this.getName(), (req, res, next) =>
 				{
 					try
 					{
@@ -46,5 +65,6 @@ class Page
 		res.json({ error: err.message });
 	}
 }
+Page.normalizeUrl = normalizeUrl;
 
 module.exports = Page;

@@ -22,6 +22,12 @@ class Entity
 	serialize() { return {}; }
 
 	/**
+	 * Method is used to write entity as json to HTTP response.
+	 * @return {Object} An object representing this entity
+	 */
+	toJSON() { return this.serialize(); }
+
+	/**
 	 * Method obtains a primary key field name for this entity
 	 * @return {string} a key (db field name)
 	 */
@@ -101,7 +107,6 @@ Entity.save = function (dbConnection, entity)
 		.collection(entity.constructor.collection)
 		.updateOne(
 			{ [key]: id }, // filte
-			r
 			{ $set: data }, // update operations
 			{ upsert: true } // insert, on conflict update
 		)
