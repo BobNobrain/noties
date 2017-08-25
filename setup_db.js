@@ -198,9 +198,11 @@ function generateFakeData(scales = 1)
 
 	function generateFile(user, type = 'text/plain')
 	{
+		const uuid = uuid4();
 		return {
-			uuid: uuid4(),
+			uuid,
 			owner: user.uuid,
+			name: uuid.substr(0, 7),
 			type,
 			size: rnd(1024)
 		};

@@ -32,6 +32,7 @@ Noty : {
 // файл, содержимое которого хранится в файловой системе (см. Файлы)
 File : {
 	uuid: uuid (index, PK),
+	name: string,
 	owner: User.uuid (index),
 	type: string, // mime
 	size: int // bytes

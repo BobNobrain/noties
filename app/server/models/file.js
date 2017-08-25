@@ -6,12 +6,14 @@ class File extends UuidEntity
 	constructor({
 		uuid,
 		size = 0,
+		name = '',
 		owner = null,
 		type = 'text/plain'
 	} = {})
 	{
 		super({ uuid });
 		this.size = size;
+		this.name = name;
 		this.owner = owner;
 		this.type = type;
 	}
@@ -20,6 +22,7 @@ class File extends UuidEntity
 	{
 		const data = super.serialize();
 		data.size = this.size;
+		data.name = this.name;
 		data.owner = this.owner;
 		data.type = this.type;
 		return data;
