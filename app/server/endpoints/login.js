@@ -22,12 +22,13 @@ class LoginEndpoint extends JsonEndpoint
 		const conn = Connection.getDefaultInstance();
 		return conn
 			.connect()
-			.then(db => Entity.extract(db, User, {}))
+			.then(db => Entity.extract(db, User, { username: login }))
 			.then(users => 
 			{
 				conn.close();
 				if (users.length === 1)
 				{
+					// TODO: check password
 					req.session.userUuid = users[0].uuid;
 					req.session.username = users[0].username;
 					return { success: true };

@@ -1,0 +1,65 @@
+@import "variables.less";
+
+html, body { padding: 0; margin: 0; }
+
+a {
+	color: @mainColor;
+	text-decoration: none;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+header nav {
+	width: 100%;
+	padding: 0.1em;
+	background: #333;
+	color: #fff;
+
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-flow: row wrap;
+
+		li {
+			padding: 0;
+			margin: 0;
+			display: block;
+
+			a {
+				display: block;
+				padding: 0.5em;
+				margin: 0;
+			}
+		}
+	}
+}
+
+footer {
+	display: flex;
+	justify-content: center;
+
+	border-top: solid 0.8em #333;
+	background: #555;
+	color: #fff;
+
+	section {
+		width: 15em;
+		max-width: 30%;
+		margin: 0.1em;
+
+		ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+	}
+}
+
+.hidden {
+	display: none !important;
+}
