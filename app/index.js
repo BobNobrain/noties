@@ -4,6 +4,7 @@ const path = require('path');
 const config = require('./config');
 const sitemap = require('./sitemap');
 const api = require('./server/api');
+const restrict = require('./server/auth');
 
 let app = express();
 
@@ -11,12 +12,17 @@ let app = express();
 let logger = require('morgan');
 let bodyParser = require('body-parser');
 let serveStatic = require('serve-static');
+let cookieParser = require('cookie-parser');
+let session = require('express-session');
 
 app.use(logger(config.NODE_ENV === 'prod'? 'tiny' : 'dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
+app.use(cookieParser());
+app.use(session({ secret: config.cookieSecret }));
+app.use(restrict(config.loginPage))
 app.use(serveStatic(path.join(path.dirname(__dirname), config.staticFolder), {'index': ['index.html', 'index.htm']}));
 
 // register endpoints

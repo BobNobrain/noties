@@ -31,4 +31,6 @@ Connection.getDefaultInstance = function ()
 	return new Connection(config);
 };
 
+Connection.DUPLICATE_KEY_ERROR = 11000;
+
 module.exports = Connection;

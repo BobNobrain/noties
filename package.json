@@ -25,7 +25,9 @@
   },
   "dependencies": {
     "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.4",
+    "express-session": "^1.15.5",
     "handlebars": "^4.0.10",
     "mongodb": "^2.2.31",
     "morgan": "^1.8.2",

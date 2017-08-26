@@ -6,5 +6,8 @@ module.exports = {
 
 	staticFolder: 'public',
 	port: 1337,
-	mongoUrl: `mongodb://${process.env.DB_IP}:27017/noties`
+	mongoUrl: `mongodb://${process.env.DB_IP}:27017/noties`,
+
+	cookieSecret: 'coookies!!! omnomnomnom',
+	loginPage: '/login'
 };
