@@ -9,7 +9,7 @@ const User = require('../models/user');
 
 class LogoutEndpoint extends JsonEndpoint
 {
-	constuctor()
+	constructor()
 	{
 		super('/logout');
 	}

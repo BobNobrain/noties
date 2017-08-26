@@ -6,14 +6,17 @@ const sitemap = require('./sitemap');
 const api = require('./server/api');
 const restrict = require('./server/auth');
 
-let app = express();
+const app = express();
 
 // middleware
-let logger = require('morgan');
-let bodyParser = require('body-parser');
-let serveStatic = require('serve-static');
-let cookieParser = require('cookie-parser');
-let session = require('express-session');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const serveStatic = require('serve-static');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+
+const defaultConnection = require('./server/mongo/connection').getDefaultInstance();
 
 app.use(logger(config.NODE_ENV === 'prod'? 'tiny' : 'dev'));
 app.use(bodyParser.json());
@@ -21,7 +24,15 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(cookieParser());
-app.use(session({ secret: config.cookieSecret }));
+app.use(session({
+	secret: config.cookieSecret,
+	resave: false,
+	saveUninitialized: false,
+	store: new MongoStore({
+		dbPromise: defaultConnection.connect(),
+		touchAfter: 3600 //s
+	})
+}));
 app.use(restrict(config.loginPage))
 app.use(serveStatic(path.join(path.dirname(__dirname), config.staticFolder), {'index': ['index.html', 'index.htm']}));
 

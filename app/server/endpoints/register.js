@@ -9,7 +9,7 @@ const User = require('../models/user');
 
 class RegisterEndpoint extends JsonEndpoint
 {
-	constuctor()
+	constructor()
 	{
 		super('/register');
 	}
