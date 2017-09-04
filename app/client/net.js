@@ -3,12 +3,12 @@ const Q = require('q');
 const MIME_JSON = 'application/json';
 
 const net = {
-	request(method, url, body)
+	request(method, url, body, isJson = true)
 	{
 		const defer = Q.defer();
 		const req = new XMLHttpRequest();
 		req.open(method, url, true);
-		if (body != null && typeof body === typeof {})
+		if (isJson)
 			req.setRequestHeader('Content-Type', MIME_JSON);
 		req.send(body);
 
@@ -45,17 +45,17 @@ const net = {
 			.map(pname => `${escape(pname)}=${escape(params[pname])}`)
 			.join('&')
 		;
-		return this.request('GET', url + query, null);
+		return this.request('GET', url + query, null, false);
 	},
 
 	post(url, params)
 	{
-		return this.request('POST', url, JSON.stringify(params));
+		return this.request('POST', url, JSON.stringify(params), true);
 	},
 
 	delete(url)
 	{
-		return this.request('DELETE', url, null);
+		return this.request('DELETE', url, null, false);
 	},
 
 	redirect(url)

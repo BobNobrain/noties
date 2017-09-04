@@ -16,10 +16,10 @@ class RegisterEndpoint extends JsonEndpoint
 
 	post(req, res)
 	{
-		const login = req.body.login;
-		const passw = req.body.password;
+		const username = req.body.username;
+		const password = req.body.password;
 
-		const newUser = new User({ username: login, password: passw });
+		const newUser = new User({ username, password });
 
 		let success = false;
 

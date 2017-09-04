@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Register</title>
+	{{> include}}
+</head>
+<body>
+	{{> header}}
+	<section class="fullpage-form-container">
+		<form id="register_form" class="fullpage-form">
+			<div id="error_msg" class="hidden">Error message here</div>
+			<label for="login">Username:</label>
+			<input type="text" name="login" id="login_text" placeholder="Username">
+			<label for="passw">Password:</label>
+			<input type="password" name="passw" id="passw_text">
+			<label for="passw">Confirm Password:</label>
+			<input type="password" name="passw" id="passw_text_confirm">
+			<div class="form-footer">	
+				<input type="submit" value="Register">
+			</div>
+		</form>
+	</section>
+	{{> footer}}
+</body>
+</html>

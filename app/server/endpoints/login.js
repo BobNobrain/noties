@@ -16,13 +16,15 @@ class LoginEndpoint extends JsonEndpoint
 
 	post(req, res)
 	{
-		const login = req.body.login;
+		const username = req.body.username;
 		const passw = req.body.password;
+
+		console.log(req.body);
 
 		const conn = Connection.getDefaultInstance();
 		return conn
 			.connect()
-			.then(db => Entity.extract(db, User, { username: login }))
+			.then(db => Entity.extract(db, User, { username }))
 			.then(users => 
 			{
 				conn.close();
