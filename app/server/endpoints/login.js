@@ -26,6 +26,8 @@ class LoginEndpoint extends JsonEndpoint
 		const username = req.body.username;
 		const passw = req.body.password;
 
+		let user = null;
+
 		console.log(req.body);
 
 		const conn = Connection.getDefaultInstance();
@@ -37,17 +39,15 @@ class LoginEndpoint extends JsonEndpoint
 				conn.close();
 				if (users.length === 1)
 				{
-					return {
-						checkResult: bcrypt.compare(passw, users[0].password),
-						user: users[0]
-					};
+					user = users[0];
+					return bcrypt.compare(passw, users[0].password);
 				}
 				else
 				{
 					clearAuthAndThrow(req);
 				}
 			})
-			.then(({checkResult, user}) =>
+			.then(checkResult =>
 			{
 				if (checkResult)
 				{

@@ -9,5 +9,7 @@ module.exports = {
 	mongoUrl: `mongodb://${process.env.DB_IP}:27017/noties`,
 
 	cookieSecret: 'coookies!!! omnomnomnom',
-	loginPage: '/login'
+	loginPage: '/login',
+
+	hashingLevel: 10
 };

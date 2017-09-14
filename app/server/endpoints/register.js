@@ -8,7 +8,9 @@ const Connection = require('../mongo/connection.js');
 const Entity = require('../models/entity');
 const User = require('../models/user');
 
-const howManyTimes = 10;
+const config = require('../../config');
+
+const howManyTimes = config.hashingLevel;
 
 class RegisterEndpoint extends JsonEndpoint
 {
