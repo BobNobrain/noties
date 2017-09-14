@@ -37,6 +37,13 @@ class User extends UuidEntity
 		return data;
 	}
 
+	toJSON()
+	{
+		const json = super.toJSON();
+		delete json.password;
+		return json;
+	}
+
 	extractBlackList(dbConnection)
 	{
 		return Entity.extractSerial(dbConnection, User, this.blackList.map(uuid => ({ uuid })));

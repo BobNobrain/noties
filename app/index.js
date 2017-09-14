@@ -19,7 +19,7 @@ const MongoStore = require('connect-mongo')(session);
 const defaultConnection = require('./server/mongo/connection').getDefaultInstance();
 
 app.use(logger(config.NODE_ENV === 'prod'? 'tiny' : 'dev'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ strict: false }));
 app.use(bodyParser.urlencoded({
 	extended: true
 }));

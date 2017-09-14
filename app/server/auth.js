@@ -3,6 +3,7 @@ const url = require('url');
 const restrictedPages = [
 	/^\/profile.*$/,
 	/^\/noties.*$/,
+	/^\/logout.*$/,
 	/^\/api\/noties.*$/,
 	/^\/api\/users.*$/,
 	/^\/api\/logout.*$/,
