@@ -29,6 +29,7 @@ const net = {
 
 			if (req.status >= 200 && req.status < 300)
 			{
+				defer.resolve(responseBody);
 			}
 			else
 			{

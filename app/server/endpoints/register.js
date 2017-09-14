@@ -1,4 +1,5 @@
 const e = require('http-errors');
+const bcrypt = require('bcrypt');
 
 const JsonEndpoint = require('../rest/jsonendpoint');
 // const Api = require('../rest/api');
@@ -6,6 +7,8 @@ const Connection = require('../mongo/connection.js');
 
 const Entity = require('../models/entity');
 const User = require('../models/user');
+
+const howManyTimes = 10;
 
 class RegisterEndpoint extends JsonEndpoint
 {
@@ -24,28 +27,40 @@ class RegisterEndpoint extends JsonEndpoint
 		let success = false;
 
 		const conn = Connection.getDefaultInstance();
-		return conn
-			.connect()
-			.then(db => Entity.save(db, newUser))
+		return bcrypt
+			.hash(password, howManyTimes)
+			.then(hash =>
+			{
+				newUser.password = hash;
+				return conn.connect();
+			})
+			.then(db => Entity.save(db, newUser, { strictInsert: true }))
+			.catch(err =>
+			{
+				if (err.code === Connection.DUPLICATE_KEY_ERROR)
+				{
+					throw e(409, 'This username is already taken!');
+				}
+				throw err;
+			})
 			.then(result => 
 			{
 				conn.close();
 				if (result.writeError)
 				{
-					if (result.writeError.code === Connection.DUPLICATE_KEY_ERROR)
-					{
-						throw e(409, 'This username is already taken!');
-					}
-					throw e(503);
+					throw e(503); // db seems to be unavailable
 				}
-				if (result.nUpserted !== 1)
+				if (result.result.n !== 1)
+				{
+					console.error(result);
 					throw e(500);
+				}
 				return true;
 			})
 			.then(success =>
 			{
-				req.session.userUuid = users[0].uuid;
-				req.session.username = users[0].username;
+				req.session.userUuid = newUser.uuid;
+				req.session.username = newUser.username;
 				return { success, user: newUser.toJSON() };
 			})
 		;

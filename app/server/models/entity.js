@@ -97,20 +97,26 @@ Entity.extractSerial = function (dbConnection, EntityClass, filters)
  * @param  {Entity} An entity to save
  * @return {Promise} result of update operation
  */
-Entity.save = function (dbConnection, entity)
+Entity.save = function (dbConnection, entity, { strictInsert = false, strictUpdate = false } = {})
 {
 	const data = entity.serialize();
 	const key = data[entity.getPK()];
 	const id = data[key];
 	delete data[key];
-	return dbConnection
-		.collection(entity.constructor.collection)
-		.updateOne(
+
+	const collection = dbConnection.collection(entity.constructor.collection);
+	if (strictInsert)
+	{
+		return collection.insertOne(data);
+	}
+	else
+	{
+		return collection.updateOne(
 			{ [key]: id }, // filte
 			{ $set: data }, // update operations
-			{ upsert: true } // insert, on conflict update
-		)
-	;
+			{ upsert: !strictUpdate } // insert, on conflict update
+		);
+	}
 };
 
 module.exports = Entity;

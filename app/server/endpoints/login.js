@@ -1,4 +1,5 @@
 const e = require('http-errors');
+const bcrypt = require('bcrypt');
 
 const JsonEndpoint = require('../rest/jsonendpoint');
 // const Api = require('../rest/api');
@@ -6,6 +7,12 @@ const Connection = require('../mongo/connection.js');
 
 const Entity = require('../models/entity');
 const User = require('../models/user');
+
+const clearAuthAndThrow = req =>
+{
+	req.session.userUuid = '';
+	throw new e.Unauthorized('Bad login/password');
+}
 
 class LoginEndpoint extends JsonEndpoint
 {
@@ -30,15 +37,27 @@ class LoginEndpoint extends JsonEndpoint
 				conn.close();
 				if (users.length === 1)
 				{
-					// TODO: check password
-					req.session.userUuid = users[0].uuid;
-					req.session.username = users[0].username;
+					return {
+						checkResult: bcrypt.compare(passw, users[0].password),
+						user: users[0]
+					};
+				}
+				else
+				{
+					clearAuthAndThrow(req);
+				}
+			})
+			.then(({checkResult, user}) =>
+			{
+				if (checkResult)
+				{
+					req.session.userUuid = user.uuid;
+					req.session.username = user.username;
 					return { success: true };
 				}
 				else
 				{
-					req.session.userUuid = '';
-					throw new e.Unauthorized('Bad login/password');
+					clearAuthAndThrow(req);
 				}
 			})
 		;
